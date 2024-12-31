@@ -4,7 +4,7 @@ require_relative 'lib/rlox/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'rlox'
-  spec.version = Rlox::VERSION
+  spec.version = RLox::VERSION
   spec.authors = ['Maurizio De Santis']
   spec.email = ['desantis.maurizio@gmail.com']
 

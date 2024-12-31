@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class TestRlox < Minitest::Test
+class TestRLox < Minitest::Test
   def test_that_it_has_a_version_number
-    refute_nil ::Rlox::VERSION
+    refute_nil ::RLox::VERSION
   end
 
   def test_it_does_something_useful
