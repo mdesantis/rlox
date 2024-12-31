@@ -1,0 +1,23 @@
+require:
+  - rubocop-minitest
+  - rubocop-performance
+  - rubocop-rake
+
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: enable
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Lint/UnreachableLoop:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/SafeNavigation:
+  MaxChainLength: 1
