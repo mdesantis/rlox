@@ -3,39 +3,58 @@
 require_relative 'rlox/version'
 
 module RLox
-  module_function
-
-  def main
-    case ARGV.size
-    when 1 then run_file ARGV[0]
-    when 0 then run_prompt
-    else
-      warn 'Usage: rlox [script]'
-      exit 64
+  class Main
+    def initialize
+      case ARGV.size
+      when 1 then run_file ARGV[0]
+      when 0 then run_prompt
+      else
+        warn 'Usage: rlox [script]'
+        exit 64
+      end
     end
-  end
 
-  def run_file(path)
-    run File.read path
-  end
+    private
 
-  def run_prompt
-    loop do
-      print '> '
+    attr_accessor :had_error
 
-      break if ARGF.eof?
+    def run_file(path)
+      run File.read path
 
-      run ARGF.readline
+      # Indicate an error in the exit code.
+      exit(65) if had_error
     end
-  end
 
-  def run(source)
-    scanner = Scanner.new(source)
-    tokens = scanner.scan_tokens
+    def run_prompt
+      loop do
+        print '> '
 
-    # For now, just print the tokens.
-    tokens.each do |token|
-      puts token
+        break if ARGF.eof?
+
+        run ARGF.readline
+
+        self.had_error = false
+      end
+    end
+
+    def run(source)
+      scanner = Scanner.new source
+      tokens = scanner.scan_tokens
+
+      # For now, just print the tokens.
+      tokens.each do |token|
+        puts token
+      end
+    end
+
+    def error(line, message)
+      report line, '', message
+    end
+
+    def report(line, where, message)
+      warn "[line #{line} Error#{where}: #{message}"
+
+      self.had_error = true
     end
   end
 end
