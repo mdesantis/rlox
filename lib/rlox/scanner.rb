@@ -16,7 +16,7 @@ class RLox::Scanner
       scan_token
     end
 
-    tokens.push Token.new(TokenType::EOF, '', nil, line)
+    tokens.push RLox::Token.new(RLox::TokenType::EOF, '', nil, line)
     tokens
   end
 
@@ -32,16 +32,17 @@ class RLox::Scanner
   def scan_token
     c = advance
     case c
-    when '(' then add_token TokenType::LEFT_PAREN
-    when ')' then add_token TokenType::RIGHT_PAREN
-    when '{' then add_token TokenType::LEFT_BRACE
-    when '}' then add_token TokenType::RIGHT_BRACE
-    when ',' then add_token TokenType::COMMA
-    when '.' then add_token TokenType::DOT
-    when '_' then add_token TokenType::MINUS
-    when '+' then add_token TokenType::PLUS
-    when ';' then add_token TokenType::SEMICOLON
-    when '*' then add_token TokenType::STAR
+    when '(' then add_token RLox::TokenType::LEFT_PAREN
+    when ')' then add_token RLox::TokenType::RIGHT_PAREN
+    when '{' then add_token RLox::TokenType::LEFT_BRACE
+    when '}' then add_token RLox::TokenType::RIGHT_BRACE
+    when ',' then add_token RLox::TokenType::COMMA
+    when '.' then add_token RLox::TokenType::DOT
+    when '_' then add_token RLox::TokenType::MINUS
+    when '+' then add_token RLox::TokenType::PLUS
+    when ';' then add_token RLox::TokenType::SEMICOLON
+    when '*' then add_token RLox::TokenType::STAR
+    else RLox.error line, 'Unexpected character.'
     end
   end
 
@@ -51,6 +52,6 @@ class RLox::Scanner
 
   def add_token(type, literal = nil)
     text = source[start, current]
-    tokens.push Token.new(type, text, literal, line)
+    tokens.push RLox::Token.new(type, text, literal, line)
   end
 end
