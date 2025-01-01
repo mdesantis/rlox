@@ -9,6 +9,10 @@ class RLox
         @operator = operator
         @right = right
       end
+
+      def accept(visitor)
+        visitor.visit_unary_expr self
+      end
     end
   end
 end

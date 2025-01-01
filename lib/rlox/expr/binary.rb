@@ -10,6 +10,10 @@ class RLox
         @operator = operator
         @right = right
       end
+
+      def accept(visitor)
+        visitor.visit_binary_expr self
+      end
     end
   end
 end

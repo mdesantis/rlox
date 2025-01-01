@@ -8,6 +8,10 @@ class RLox
       def initialize(value)
         @value = value
       end
+
+      def accept(visitor)
+        visitor.visit_literal_expr self
+      end
     end
   end
 end
