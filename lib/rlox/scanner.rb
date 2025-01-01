@@ -57,6 +57,7 @@ class RLox
         end
       when ' ', "\r", "\t" # Ignore whitespace.
       when "\n" then self.line += 1
+      when '"' then string
       else RLox.error line, 'Unexpected character.'
       end
     end
@@ -84,6 +85,25 @@ class RLox
       return "\0" if at_end?
 
       source[current]
+    end
+
+    def string
+      while peek != '"' && !at_end?
+        self.line += 1 if peek == "\n"
+        advance
+      end
+
+      if at_end?
+        RLox.error line, 'Unterminated string.'
+        return
+      end
+
+      # The closing ".
+      advance
+
+      # Trim the surrounding quotes.
+      value = source[(start + 1)...(current - 1)]
+      add_token STRING, value
     end
   end
 end
