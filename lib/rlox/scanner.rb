@@ -58,6 +58,7 @@ class RLox
       when ' ', "\r", "\t" # Ignore whitespace.
       when "\n" then self.line += 1
       when '"' then string
+      when method(:digit?) then number
       else RLox.error line, 'Unexpected character.'
       end
     end
@@ -104,6 +105,30 @@ class RLox
       # Trim the surrounding quotes.
       value = source[(start + 1)...(current - 1)]
       add_token STRING, value
+    end
+
+    def digit?(char)
+      char >= '0' && char <= '9'
+    end
+
+    def number
+      advance while digit? peek
+
+      # Look for a fractional part.
+      if peek == '.' && digit?(peek_next)
+        # Consume the "."
+        advance
+
+        advance while digit? peek
+      end
+
+      add_token NUMBER, source[start...current].to_f
+    end
+
+    def peek_next
+      return "\0" if (current + 1) >= source.size
+
+      source[current + 1]
     end
   end
 end
