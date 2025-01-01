@@ -68,7 +68,7 @@ class RLox
       when '>' then add_token match?('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER
       when '/'
         if match?('/')
-          advance while peek != "\n" && !at_end?
+          advance while peek != "\n" && !at_end? # Ignore comments.
         else
           add_token TokenType::SLASH
         end
