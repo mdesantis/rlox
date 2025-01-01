@@ -7,6 +7,12 @@ AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
 
+Lint/EmptyClass:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
