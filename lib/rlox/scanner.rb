@@ -49,6 +49,14 @@ class RLox
       when '=' then add_token match?('=') ? EQUAL_EQUAL : EQUAL
       when '<' then add_token match?('=') ? LESS_EQUAL : LESS
       when '>' then add_token match?('=') ? GREATER_EQUAL : GREATER
+      when '/'
+        if match?('/')
+          advance while peek != "\n" && !at_end?
+        else
+          add_token SLASH
+        end
+      when ' ', "\r", "\t" # Ignore whitespace.
+      when "\n" then self.line += 1
       else RLox.error line, 'Unexpected character.'
       end
     end
@@ -70,6 +78,12 @@ class RLox
 
       self.current += 1
       true
+    end
+
+    def peek
+      return "\0" if at_end?
+
+      source[current]
     end
   end
 end
