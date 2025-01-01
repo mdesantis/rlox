@@ -2,7 +2,24 @@
 
 class RLox
   class Scanner
-    include TokenType
+    KEYWORDS = {
+      'and' => TokenType::AND,
+      'class' => TokenType::CLASS,
+      'else' => TokenType::ELSE,
+      'false' => TokenType::FALSE,
+      'for' => TokenType::FOR,
+      'fun' => TokenType::FUN,
+      'if' => TokenType::IF,
+      'nil' => TokenType::NIL,
+      'or' => TokenType::OR,
+      'print' => TokenType::PRINT,
+      'return' => TokenType::RETURN,
+      'super' => TokenType::SUPER,
+      'this' => TokenType::THIS,
+      'true' => TokenType::TRUE,
+      'var' => TokenType::VAR,
+      'while' => TokenType::WHILE
+    }.freeze
 
     def initialize(source)
       @source = source
@@ -19,7 +36,7 @@ class RLox
         scan_token
       end
 
-      tokens.push Token.new(EOF, '', nil, line)
+      tokens.push Token.new(TokenType::EOF, '', nil, line)
       tokens
     end
 
@@ -35,30 +52,31 @@ class RLox
     def scan_token
       c = advance
       case c
-      when '(' then add_token LEFT_PAREN
-      when ')' then add_token RIGHT_PAREN
-      when '{' then add_token LEFT_BRACE
-      when '}' then add_token RIGHT_BRACE
-      when ',' then add_token COMMA
-      when '.' then add_token DOT
-      when '_' then add_token MINUS
-      when '+' then add_token PLUS
-      when ';' then add_token SEMICOLON
-      when '*' then add_token STAR
-      when '!' then add_token match?('=') ? BANG_EQUAL : BANG
-      when '=' then add_token match?('=') ? EQUAL_EQUAL : EQUAL
-      when '<' then add_token match?('=') ? LESS_EQUAL : LESS
-      when '>' then add_token match?('=') ? GREATER_EQUAL : GREATER
+      when '(' then add_token TokenType::LEFT_PAREN
+      when ')' then add_token TokenType::RIGHT_PAREN
+      when '{' then add_token TokenType::LEFT_BRACE
+      when '}' then add_token TokenType::RIGHT_BRACE
+      when ',' then add_token TokenType::COMMA
+      when '.' then add_token TokenType::DOT
+      when '_' then add_token TokenType::MINUS
+      when '+' then add_token TokenType::PLUS
+      when ';' then add_token TokenType::SEMICOLON
+      when '*' then add_token TokenType::STAR
+      when '!' then add_token match?('=') ? TokenType::BANG_EQUAL : TokenType::BANG
+      when '=' then add_token match?('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL
+      when '<' then add_token match?('=') ? TokenType::LESS_EQUAL : TokenType::LESS
+      when '>' then add_token match?('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER
       when '/'
         if match?('/')
           advance while peek != "\n" && !at_end?
         else
-          add_token SLASH
+          add_token TokenType::SLASH
         end
       when ' ', "\r", "\t" # Ignore whitespace.
       when "\n" then self.line += 1
       when '"' then string
       when method(:digit?) then number
+      when method(:alpha?) then identifier
       else RLox.error line, 'Unexpected character.'
       end
     end
@@ -104,7 +122,7 @@ class RLox
 
       # Trim the surrounding quotes.
       value = source[(start + 1)...(current - 1)]
-      add_token STRING, value
+      add_token TokenType::STRING, value
     end
 
     def digit?(char)
@@ -122,13 +140,30 @@ class RLox
         advance while digit? peek
       end
 
-      add_token NUMBER, source[start...current].to_f
+      add_token TokenType::NUMBER, source[start...current].to_f
     end
 
     def peek_next
       return "\0" if (current + 1) >= source.size
 
       source[current + 1]
+    end
+
+    def identifier
+      advance while alphanumeric? peek
+
+      text = source[start...current]
+      type = KEYWORDS.fetch[text] || TokenType::IDENTIFIER
+
+      add_token type
+    end
+
+    def alpha?(char)
+      (char >= 'a' && char <= 'z') || (char >= 'A' && char <= 'Z') || char == '_'
+    end
+
+    def alphanumeric?(char)
+      alpha?(char) || digit?(char)
     end
   end
 end
