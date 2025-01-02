@@ -41,9 +41,14 @@ class RLox
       end
     end
 
+    def runtime_error(error)
+      puts "#{error.message}\n[line #{error.token.line}]"
+      self.had_runtime_error = true
+    end
+
     private
 
-    attr_accessor :had_error
+    attr_accessor :had_error, :had_runtime_error
 
     def run_file(path)
       run File.read path
