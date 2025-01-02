@@ -73,12 +73,15 @@ class RLox
       scanner = Scanner.new source
       tokens = scanner.scan_tokens
 
+      return if had_error
+
       parser = Parser.new tokens
       expression = parser.parse
 
       return if had_error
 
-      puts AstPrinter.new.print expression
+      interpreter = Interpreter.new
+      interpreter.interpret expression
     end
 
     def report(line, where, message)

@@ -58,7 +58,7 @@ class RLox
       when '}' then add_token TokenType::RIGHT_BRACE
       when ',' then add_token TokenType::COMMA
       when '.' then add_token TokenType::DOT
-      when '_' then add_token TokenType::MINUS
+      when '-' then add_token TokenType::MINUS
       when '+' then add_token TokenType::PLUS
       when ';' then add_token TokenType::SEMICOLON
       when '*' then add_token TokenType::STAR

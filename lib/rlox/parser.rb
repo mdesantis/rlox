@@ -54,8 +54,6 @@ class RLox
 
     def advance
       self.current += 1 unless at_end?
-
-      previous
     end
 
     def at_end?

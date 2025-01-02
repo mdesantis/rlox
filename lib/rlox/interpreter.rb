@@ -53,7 +53,7 @@ class RLox
       when TokenType::PLUS
         return left + right if (left.is_a?(Float) && right.is_a?(Float)) || (left.is_a?(String) && right.is_a?(String))
 
-        raise RLox::RuntimeError expr.operator, 'Operands must be two numbers or two strings.'
+        raise RLox::RuntimeError.new expr.operator, 'Operands must be two numbers or two strings.'
       when TokenType::SLASH
         check_number_operands expr.operator, left, right
         Float(left) / Float(right)
@@ -68,13 +68,13 @@ class RLox
     def check_number_operand(operator, operand)
       return if operand.is_a? Float
 
-      raise RLox::RuntimeError operator, 'Operand must be a number.'
+      raise RLox::RuntimeError.new operator, 'Operand must be a number.'
     end
 
     def check_number_operands(operator, left, right)
       return if left.is_a?(Float) && right.is_a?(Float)
 
-      raise RLox::RuntimeError operator, 'Operand must be numbers.'
+      raise RLox::RuntimeError.new operator, 'Operand must be numbers.'
     end
 
     def evaluate(expr)
