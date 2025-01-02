@@ -37,6 +37,9 @@ Metrics/PerceivedComplexity:
 Style/Documentation:
   Enabled: false
 
+Style/GuardClause:
+  AllowConsecutiveConditionals: true
+
 Style/NumericLiterals:
   Enabled: false
 
