@@ -77,7 +77,7 @@ class RLox
       when '"' then string
       when method(:digit?) then number
       when method(:alpha?) then identifier
-      else RLox.error line, 'Unexpected character.'
+      else RLox.error 'Unexpected character.', line: line
       end
     end
 
@@ -113,7 +113,7 @@ class RLox
       end
 
       if at_end?
-        RLox.error line, 'Unterminated string.'
+        RLox.error 'Unterminated string.', line: line
         return
       end
 

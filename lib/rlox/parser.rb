@@ -2,6 +2,8 @@
 
 class RLox
   class Parser
+    class ParseError < RuntimeError; end
+
     def initialize(tokens)
       self.tokens = tokens
       self.current = 0
@@ -115,6 +117,17 @@ class RLox
         consume TokenType::RIGHT_PAREN, "Expect ')' after expression."
         Expr::Grouping.new expr
       end
+    end
+
+    def consume(type, message)
+      return advance if check type
+
+      raise error peek, message
+    end
+
+    def error(token, message)
+      RLox.error message, token: token
+      ParseError.new
     end
   end
 end

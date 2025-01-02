@@ -20,8 +20,16 @@ class RLox
       end
     end
 
-    def error(line, message)
-      report line, '', message
+    def error(message, line: nil, token: nil)
+      if token
+        if token.type == TokenType::EOF
+          report token.line, ' at end', message
+        else
+          report token.line, "at '#{token.lexeme}'", message
+        end
+      else
+        report line, '', message
+      end
     end
 
     private
