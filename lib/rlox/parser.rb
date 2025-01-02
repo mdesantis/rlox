@@ -10,9 +10,10 @@ class RLox
     end
 
     def parse
-      expression
-    rescue ParseError
-      nil
+      statements = []
+      statements.push statement until at_end?
+
+      statements
     end
 
     private
@@ -21,6 +22,24 @@ class RLox
 
     def expression
       equality
+    end
+
+    def statement
+      return print_statement if match? TokenType::PRINT
+
+      expression_statement
+    end
+
+    def print_statement
+      value = expression
+      consume TokenType::SEMICOLON, "Expect ';' after value."
+      Stmt::Print.new value
+    end
+
+    def expression_statement
+      expr = expression
+      consume TokenType::SEMICOLON, "Expect ';' after expression."
+      Stmt::Expression.new expr
     end
 
     def equality
