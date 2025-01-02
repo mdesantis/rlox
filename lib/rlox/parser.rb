@@ -129,5 +129,28 @@ class RLox
       RLox.error message, token: token
       ParseError.new
     end
+
+    def synchronize
+      advance
+
+      until at_end?
+        return if previous.type == TokenType::SEMICOLON
+
+        case peek.type
+        when
+          TokenType::CLASS,
+          TokenType::FUN,
+          TokenType::VAR,
+          TokenType::FOR,
+          TokenType::IF,
+          TokenType::WHILE,
+          TokenType::PRINT,
+          TokenType::RETURN
+          return
+        end
+
+        advance
+      end
+    end
   end
 end
