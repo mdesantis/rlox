@@ -11,7 +11,7 @@ class RLox
 
     def parse
       statements = []
-      statements.push statement until at_end?
+      statements.push declaration until at_end?
 
       statements
     end
@@ -22,6 +22,15 @@ class RLox
 
     def expression
       equality
+    end
+
+    def declaration
+      return var_declaration if match? VAR
+
+      statement
+    rescue ParseError
+      synchronize
+      nil
     end
 
     def statement
@@ -40,6 +49,16 @@ class RLox
       expr = expression
       consume TokenType::SEMICOLON, "Expect ';' after expression."
       Stmt::Expression.new expr
+    end
+
+    def var_declaration
+      name = consume TokenType::IDENTIFIER, 'Expect variable name.'
+
+      initializer = nil
+      initializer = expression if match? TokenType::EQUAL
+
+      consume SEMICOLON, "Expect ';' after variable declaration."
+      Stmt::Var.new name, initializer
     end
 
     def equality
@@ -140,6 +159,8 @@ class RLox
       return Expr::Literal.new true if match? TokenType::TRUE
       return Expr::Literal.new nil if match? TokenType::NIL
       return Expr::Literal.new previous.literal if match? TokenType::NUMBER, TokenType::STRING
+
+      return Expr::Variable.new previous if match? TokenType::IDENTIFIER
 
       if match? TokenType::LEFT_PAREN
         expr = expression
