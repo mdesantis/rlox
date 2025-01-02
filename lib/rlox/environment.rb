@@ -3,7 +3,7 @@
 class RLox
   class Environment
     def initialize
-      @values = values
+      @values = {}
     end
 
     def define(name, value)

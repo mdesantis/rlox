@@ -20,6 +20,8 @@ class RLox
 
   class << self
     def main
+      @interpreter = Interpreter.new
+
       case ARGV.size
       when 1 then run_file ARGV[0]
       when 0 then run_prompt
@@ -48,13 +50,15 @@ class RLox
 
     private
 
+    attr_reader :interpreter
     attr_accessor :had_error, :had_runtime_error
 
     def run_file(path)
       run File.read path
 
       # Indicate an error in the exit code.
-      exit(65) if had_error
+      exit 65 if had_error
+      exit 70 if had_runtime_error
     end
 
     def run_prompt
@@ -80,7 +84,6 @@ class RLox
 
       return if had_error
 
-      interpreter = Interpreter.new
       interpreter.interpret statements
     end
 

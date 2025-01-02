@@ -2,6 +2,10 @@
 
 class RLox
   class Interpreter
+    def initialize
+      @environment = Environment.new
+    end
+
     def interpret(statements)
       statements.each do |statement|
         execute statement
@@ -75,7 +79,21 @@ class RLox
       nil
     end
 
+    def visit_var_stmt(stmt)
+      value = nil
+      value = evaluate stmt.initializer unless stmt.initializer.nil?
+
+      environment.define stmt.name.lexeme, value
+      nil
+    end
+
+    def visit_variable_expr(expr)
+      environment.get expr.name
+    end
+
     private
+
+    attr_reader :environment
 
     def execute(stmt)
       stmt.accept self

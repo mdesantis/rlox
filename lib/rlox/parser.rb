@@ -25,7 +25,7 @@ class RLox
     end
 
     def declaration
-      return var_declaration if match? VAR
+      return var_declaration if match? TokenType::VAR
 
       statement
     rescue ParseError
@@ -57,7 +57,7 @@ class RLox
       initializer = nil
       initializer = expression if match? TokenType::EQUAL
 
-      consume SEMICOLON, "Expect ';' after variable declaration."
+      consume TokenType::SEMICOLON, "Expect ';' after variable declaration."
       Stmt::Var.new name, initializer
     end
 
@@ -92,6 +92,7 @@ class RLox
 
     def advance
       self.current += 1 unless at_end?
+      previous
     end
 
     def at_end?
