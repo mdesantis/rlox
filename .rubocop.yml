@@ -37,6 +37,9 @@ Metrics/PerceivedComplexity:
 Style/Documentation:
   Enabled: false
 
+Style/FloatDivision:
+  Enabled: false
+
 Style/GuardClause:
   AllowConsecutiveConditionals: true
 
@@ -45,3 +48,6 @@ Style/NumericLiterals:
 
 Style/SafeNavigation:
   MaxChainLength: 1
+
+Style/SuperWithArgsParentheses:
+  Enabled: false

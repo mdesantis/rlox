@@ -9,6 +9,15 @@ loader.inflector.inflect(
 loader.setup
 
 class RLox
+  class RuntimeError < RuntimeError
+    attr_reader :token
+
+    def initialize(token, message)
+      super message
+      @token = token
+    end
+  end
+
   class << self
     def main
       case ARGV.size
