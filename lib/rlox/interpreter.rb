@@ -2,6 +2,13 @@
 
 class RLox
   class Interpreter
+    def interpret(expression)
+      value = evaluate expression
+      puts stringify value
+    rescue RLox::RuntimeError => error
+      RLox.runtime_error error
+    end
+
     def visit_literal_expr(expr)
       expr.value
     end
@@ -80,6 +87,18 @@ class RLox
 
     def equal?(one, other)
       one == other
+    end
+
+    def stringify(object)
+      return 'nil' if object.nil?
+
+      if object.is_a? Float
+        text = object.to_s
+        text = text[...-2] if text.end_with? '.0'
+        return text
+      end
+
+      object.to_s
     end
   end
 end
