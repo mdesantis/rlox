@@ -153,7 +153,7 @@ class RLox
       advance while alphanumeric? peek
 
       text = source[start...current]
-      type = KEYWORDS.fetch[text] || TokenType::IDENTIFIER
+      type = KEYWORDS[text] || TokenType::IDENTIFIER
 
       add_token type
     end

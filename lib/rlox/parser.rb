@@ -9,6 +9,12 @@ class RLox
       self.current = 0
     end
 
+    def parse
+      expression
+    rescue ParseError
+      nil
+    end
+
     private
 
     attr_accessor :tokens, :current
@@ -30,7 +36,7 @@ class RLox
     end
 
     def match(*types)
-      types.each do
+      types.each do |type|
         if check type
           advance
           return true
@@ -46,8 +52,14 @@ class RLox
       peek.type == type
     end
 
+    def advance
+      self.current += 1 unless at_end?
+
+      previous
+    end
+
     def at_end?
-      peek.type == EOF
+      peek.type == TokenType::EOF
     end
 
     def peek
@@ -115,8 +127,10 @@ class RLox
       if match TokenType::LEFT_PAREN
         expr = expression
         consume TokenType::RIGHT_PAREN, "Expect ')' after expression."
-        Expr::Grouping.new expr
+        return Expr::Grouping.new expr
       end
+
+      raise error peek, 'Expect expression.'
     end
 
     def consume(type, message)

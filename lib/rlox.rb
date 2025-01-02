@@ -25,7 +25,7 @@ class RLox
         if token.type == TokenType::EOF
           report token.line, ' at end', message
         else
-          report token.line, "at '#{token.lexeme}'", message
+          report token.line, " at '#{token.lexeme}'", message
         end
       else
         report line, '', message
@@ -59,10 +59,12 @@ class RLox
       scanner = Scanner.new source
       tokens = scanner.scan_tokens
 
-      # For now, just print the tokens.
-      tokens.each do |token|
-        puts token
-      end
+      parser = Parser.new tokens
+      expression = parser.parse
+
+      return if had_error
+
+      puts AstPrinter.new.print expression
     end
 
     def report(line, where, message)
