@@ -2,7 +2,7 @@
 
 class RLox
   class Parser
-    class ParseError < RuntimeError; end
+    class ParseError < ::RuntimeError; end
 
     def initialize(tokens)
       self.tokens = tokens
@@ -45,7 +45,7 @@ class RLox
     def equality
       expr = comparison
 
-      while match TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL
+      while match? TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL
         operator = previous
         right = comparison
         expr = Expr::Binary.new expr, operator, right
@@ -54,7 +54,7 @@ class RLox
       expr
     end
 
-    def match(*types)
+    def match?(*types)
       types.each do |type|
         if check type
           advance
@@ -92,7 +92,7 @@ class RLox
     def comparison
       expr = term
 
-      while match TokenType::GREATER, TokenType::GREATER_EQUAL, TokenType::LESS, TokenType::LESS_EQUAL
+      while match? TokenType::GREATER, TokenType::GREATER_EQUAL, TokenType::LESS, TokenType::LESS_EQUAL
         operator = previous
         right = term
         expr = Expr::Binary.new expr, operator, right
@@ -104,7 +104,7 @@ class RLox
     def term
       expr = factor
 
-      while match TokenType::MINUS, TokenType::PLUS
+      while match? TokenType::MINUS, TokenType::PLUS
         operator = previous
         right = factor
         expr = Expr::Binary.new expr, operator, right
@@ -116,7 +116,7 @@ class RLox
     def factor
       expr = unary
 
-      while match TokenType::SLASH, TokenType::STAR
+      while match? TokenType::SLASH, TokenType::STAR
         operator = previous
         right = unary
         expr = Expr::Binary.new expr, operator, right
@@ -126,7 +126,7 @@ class RLox
     end
 
     def unary
-      if match TokenType::BANG, TokenType::MINUS
+      if match? TokenType::BANG, TokenType::MINUS
         operator = previous
         right = unary
         return Expr::Unary.new operator, right
@@ -136,29 +136,29 @@ class RLox
     end
 
     def primary
-      return Expr::Literal.new false if match TokenType::FALSE
-      return Expr::Literal.new true if match TokenType::TRUE
-      return Expr::Literal.new nil if match TokenType::NIL
-      return Expr::Literal.new previous.literal if match TokenType::NUMBER, TokenType::STRING
+      return Expr::Literal.new false if match? TokenType::FALSE
+      return Expr::Literal.new true if match? TokenType::TRUE
+      return Expr::Literal.new nil if match? TokenType::NIL
+      return Expr::Literal.new previous.literal if match? TokenType::NUMBER, TokenType::STRING
 
-      if match TokenType::LEFT_PAREN
+      if match? TokenType::LEFT_PAREN
         expr = expression
         consume TokenType::RIGHT_PAREN, "Expect ')' after expression."
         return Expr::Grouping.new expr
       end
 
-      raise error peek, 'Expect expression.'
+      error peek, 'Expect expression.'
     end
 
     def consume(type, message)
       return advance if check type
 
-      raise error peek, message
+      error peek, message
     end
 
     def error(token, message)
       RLox.error message, token: token
-      ParseError.new
+      raise ParseError, ''
     end
 
     def synchronize

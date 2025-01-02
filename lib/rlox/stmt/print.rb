@@ -8,6 +8,10 @@ class RLox
       def initialize(expression)
         @expression = expression
       end
+
+      def accept(visitor)
+        visitor.visit_print_stmt self
+      end
     end
   end
 end

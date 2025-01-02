@@ -76,12 +76,12 @@ class RLox
       return if had_error
 
       parser = Parser.new tokens
-      expression = parser.parse
+      statements = parser.parse
 
       return if had_error
 
       interpreter = Interpreter.new
-      interpreter.interpret expression
+      interpreter.interpret statements
     end
 
     def report(line, where, message)

@@ -2,9 +2,10 @@
 
 class RLox
   class Interpreter
-    def interpret(expression)
-      value = evaluate expression
-      puts stringify value
+    def interpret(statements)
+      statements.each do |statement|
+        execute statement
+      end
     rescue RLox::RuntimeError => error
       RLox.runtime_error error
     end
@@ -63,7 +64,22 @@ class RLox
       end
     end
 
+    def visit_expression_stmt(stmt)
+      evaluate stmt.expression
+      nil
+    end
+
+    def visit_print_stmt(stmt)
+      value = evaluate stmt.expression
+      puts stringify value
+      nil
+    end
+
     private
+
+    def execute(stmt)
+      stmt.accept self
+    end
 
     def check_number_operand(operator, operand)
       return if operand.is_a? Float
