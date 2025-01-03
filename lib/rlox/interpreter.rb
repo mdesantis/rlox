@@ -96,7 +96,7 @@ class RLox
     end
 
     def visit_function_stmt(stmt)
-      function = RLox::Function.new stmt
+      function = RLox::Function.new stmt, environment
       environment.define stmt.name.lexeme, function
       nil
     end

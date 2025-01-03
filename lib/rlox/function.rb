@@ -2,8 +2,9 @@
 
 class RLox
   class Function
-    def initialize(declaration)
+    def initialize(declaration, closure)
       @declaration = declaration
+      @closure = closure
     end
 
     def callable?
@@ -11,7 +12,7 @@ class RLox
     end
 
     def call(interpreter, arguments)
-      environment = Environment.new interpreter.globals
+      environment = Environment.new closure
       declaration.params.size.times do |i|
         environment.define declaration.params[i].lexeme, arguments[i]
       end
@@ -35,6 +36,6 @@ class RLox
 
     private
 
-    attr_reader :declaration
+    attr_reader :declaration, :closure
   end
 end
