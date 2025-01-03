@@ -138,6 +138,8 @@ class RLox
         arguments.add evaluate argument
       end
 
+      raise RLox::RuntimeError.new expr.paren, 'Can only call functions and classes.' unless callee.callable?
+
       function = callee
       function.call self, argument
     end
