@@ -282,6 +282,7 @@ class RLox
 
       unless check TokenType::RIGHT_PAREN
         begin
+          error peek, "Can't have more than 255 arguments." if arguments.size >= 255
           arguments.push expression
         end while match? TokenType::COMMA
       end
