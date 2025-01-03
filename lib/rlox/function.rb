@@ -13,7 +13,7 @@ class RLox
     def call(interpreter, arguments)
       environment = Environment.new interpreter.globals
       declaration.params.size.times do |i|
-        environment.define declaration.params.get(i).lexeme, arguments.get(i)
+        environment.define declaration.params[i].lexeme, arguments[i]
       end
 
       interpreter.execute_block declaration.body, environment

@@ -120,10 +120,12 @@ class RLox
         begin
           error peek, "Can't have more than 255 parameters." if parameters.size >= 255
 
-          parameters.add consume(TokenType::IDENTIFIER, 'Expect parameter name.')
+          parameters.push consume(TokenType::IDENTIFIER, 'Expect parameter name.')
         end while match? TokenType::COMMA
       end
       consume TokenType::RIGHT_PAREN, "Expect ')' after parameters."
+
+      consume TokenType::LEFT_BRACE, "Expect '{' before #{kind} body."
       body = block
       Stmt::Function.new name, parameters, body
     end

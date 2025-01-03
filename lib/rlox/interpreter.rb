@@ -95,6 +95,12 @@ class RLox
       nil
     end
 
+    def visit_function_stmt(stmt)
+      function = RLox::Function.new stmt
+      environment.define stmt.name.lexeme, function
+      nil
+    end
+
     def visit_print_stmt(stmt)
       value = evaluate stmt.expression
       puts stringify value
@@ -155,9 +161,8 @@ class RLox
     def visit_call_expr(expr)
       callee = evaluate expr.callee
 
-      arguments = []
-      expr.arguments.each do |argument|
-        arguments.add evaluate argument
+      arguments = expr.arguments.map do |argument|
+        evaluate argument
       end
 
       raise RLox::RuntimeError.new expr.paren, 'Can only call functions and classes.' unless callee.callable?
@@ -168,14 +173,6 @@ class RLox
       end
 
       function.call self, arguments
-    end
-
-    private
-
-    attr_accessor :environment
-
-    def execute(stmt)
-      stmt.accept self
     end
 
     def execute_block(statements, environment)
@@ -190,6 +187,14 @@ class RLox
       ensure
         self.environment = previous
       end
+    end
+
+    private
+
+    attr_accessor :environment
+
+    def execute(stmt)
+      stmt.accept self
     end
 
     def check_number_operand(operator, operand)
