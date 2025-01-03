@@ -16,6 +16,15 @@ class RLox
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
     end
 
+    def assign(name, value)
+      if values.key? name.lexeme
+        values[name.lexeme] = value
+        return
+      end
+
+      raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
+    end
+
     private
 
     attr_accessor :values
