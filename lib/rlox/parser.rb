@@ -262,7 +262,33 @@ class RLox
         return Expr::Unary.new operator, right
       end
 
-      primary
+      call
+    end
+
+    def call
+      expr = primary
+
+      loop do
+        break unless match? TokenType::LEFT_PAREN
+
+        expr = finish_call expr
+      end
+
+      expr
+    end
+
+    def finish_call(callee)
+      arguments = []
+
+      unless check TokenType::RIGHT_PAREN
+        begin
+          arguments.push expression
+        end while match? TokenType::COMMA
+      end
+
+      paren = consume TokenType::RIGHT_PAREN, "Expect ')' after arguments."
+
+      Expr::Call.new callee, paren, arguments
     end
 
     def primary
