@@ -21,7 +21,7 @@ class RLox
     attr_accessor :tokens, :current
 
     def expression
-      equality
+      assignment
     end
 
     def declaration
@@ -49,6 +49,24 @@ class RLox
       expr = expression
       consume TokenType::SEMICOLON, "Expect ';' after expression."
       Stmt::Expression.new expr
+    end
+
+    def assignment
+      expr = equality
+
+      if match? TokenType::EQUAL
+        equals = previous
+        value = assignment
+
+        if expr.is_a? Expr::Variable
+          name = expr.name
+          return Expr::Assign.new name, value
+        end
+
+        error equals, 'Invalid assignment target.'
+      end
+
+      expr
     end
 
     def var_declaration
