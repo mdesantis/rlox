@@ -2,8 +2,29 @@
 
 class RLox
   class Interpreter
+    class ClockFn
+      def arity
+        0
+      end
+
+      def callable?
+        true
+      end
+
+      def call(_interpreter, _arguments)
+        Process.clock_gettime Process::CLOCK_REALTIME, :float_millisecond
+      end
+
+      def to_s
+        '<native fn>'
+      end
+    end
+
     def initialize
-      @environment = Environment.new
+      @globals = Environment.new
+      @environment = @globals
+
+      @globals.define 'clock', ClockFn.new
     end
 
     def interpret(statements)
@@ -145,7 +166,7 @@ class RLox
         raise RLox::RuntimeError.new expr.paren, "Expected #{function.arity} arguments but got #{arguments.size}."
       end
 
-      function.call self, argument
+      function.call self, arguments
     end
 
     private
