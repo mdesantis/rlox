@@ -2,8 +2,9 @@
 
 class RLox
   class Environment
-    def initialize
+    def initialize(enclosing = nil)
       @values = {}
+      @enclosing = enclosing
     end
 
     def define(name, value)
@@ -11,8 +12,9 @@ class RLox
     end
 
     def get(name)
-      values.fetch name.lexeme
-    rescue KeyError
+      return values[name.lexeme] if values.key? name
+      return enclosing.get name if enclosing
+
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
     end
 
@@ -22,11 +24,16 @@ class RLox
         return
       end
 
+      if enclosing
+        enclosing.assign name, value
+        return
+      end
+
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
     end
 
     private
 
-    attr_accessor :values
+    attr_reader :values, :enclosing
   end
 end
