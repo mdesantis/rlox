@@ -130,6 +130,18 @@ class RLox
       nil
     end
 
+    def visit_call_expr(expr)
+      callee = evaluate expr.callee
+
+      arguments = []
+      expr.arguments.each do |argument|
+        arguments.add evaluate argument
+      end
+
+      function = callee
+      function.call self, argument
+    end
+
     private
 
     attr_accessor :environment
