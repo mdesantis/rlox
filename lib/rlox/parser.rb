@@ -38,6 +38,7 @@ class RLox
       return for_statement if match? TokenType::FOR
       return if_statement if match? TokenType::IF
       return print_statement if match? TokenType::PRINT
+      return return_statement if match? TokenType::RETURN
       return while_statement if match? TokenType::WHILE
       return Stmt::Block.new block if match? TokenType::LEFT_BRACE
 
@@ -94,6 +95,15 @@ class RLox
       value = expression
       consume TokenType::SEMICOLON, "Expect ';' after value."
       Stmt::Print.new value
+    end
+
+    def return_statement
+      keyword = previous
+      value = nil
+      value = expression unless check TokenType::SEMICOLON
+
+      consume Token::SEMICOLON, "Expect ';' after return value."
+      Stmt::Return.new keyword, value
     end
 
     def while_statement
