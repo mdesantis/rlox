@@ -36,6 +36,7 @@ class RLox
     def statement
       return if_statement if match? TokenType::IF
       return print_statement if match? TokenType::PRINT
+      return while_statement if match? TokenType::WHILE
       return Stmt::Block.new block if match? TokenType::LEFT_BRACE
 
       expression_statement
@@ -57,6 +58,15 @@ class RLox
       value = expression
       consume TokenType::SEMICOLON, "Expect ';' after value."
       Stmt::Print.new value
+    end
+
+    def while_statement
+      consume TokenType::LEFT_PAREN, "Expect '(' after 'while'."
+      condition = expression
+      consume TokenType::RIGHT_PAREN, "Expect ')' after 'while'."
+      body = statement
+
+      Stmt::While.new condition, body
     end
 
     def expression_statement

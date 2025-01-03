@@ -124,6 +124,12 @@ class RLox
       evaluate expr.right
     end
 
+    def visit_while_stmt(stmt)
+      execute stmt.body while truthy? evaluate stmt.condition
+
+      nil
+    end
+
     private
 
     attr_accessor :environment
