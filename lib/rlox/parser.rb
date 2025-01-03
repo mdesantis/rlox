@@ -34,12 +34,47 @@ class RLox
     end
 
     def statement
+      return for_statement if match? TokenType::FOR
       return if_statement if match? TokenType::IF
       return print_statement if match? TokenType::PRINT
       return while_statement if match? TokenType::WHILE
       return Stmt::Block.new block if match? TokenType::LEFT_BRACE
 
       expression_statement
+    end
+
+    def for_statement
+      consume TokenType::LEFT_PAREN, "Expect '(' after 'for'."
+
+      initializer =
+        if match? TokenType::SEMICOLON
+          nil
+        elsif match? TokenType::VAR
+          var_declaration
+        else
+          expression_statement
+        end
+
+      condition = nil
+      condition = expression unless check TokenType::SEMICOLON
+
+      consume TokenType::SEMICOLON, "Expect ';' after loop condition."
+
+      increment = nil
+      increment = expression unless check TokenType::RIGHT_PAREN
+
+      consume TokenType::RIGHT_PAREN, "Expect ')' after for clauses."
+
+      body = statement
+
+      body = Stmt::Block.new [body, Stmt::Expression.new(increment)] if increment
+
+      condition ||= Expr::Literal.new true
+      body = Stmt::While.new condition, body
+
+      body = Stmt::Block.new [initializer, body] if initializer
+
+      body
     end
 
     def if_statement
