@@ -75,7 +75,7 @@ class RLox
     end
 
     def assignment
-      expr = equality
+      expr = logical_or
 
       if match? TokenType::EQUAL
         equals = previous
@@ -87,6 +87,30 @@ class RLox
         end
 
         error equals, 'Invalid assignment target.'
+      end
+
+      expr
+    end
+
+    def logical_or
+      expr = logical_and
+
+      while match? TokenType::OR
+        operator = previous
+        right = logical_and
+        expr = Expr::Logical.new expr, operator, right
+      end
+
+      expr
+    end
+
+    def logical_and
+      expr = equality
+
+      while match? TokenType::AND
+        operator = previous
+        right = equality
+        expr = Expr::Logical.new expr, operator, right
       end
 
       expr

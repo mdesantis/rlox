@@ -112,6 +112,18 @@ class RLox
       nil
     end
 
+    def visit_logical_expr(expr)
+      left = evaluate expr.left
+
+      if expr.operator.type == TokenType::OR
+        return left if truthy? left
+      else
+        return left unless truthy? left
+      end
+
+      evaluate expr.right
+    end
+
     private
 
     attr_accessor :environment
