@@ -19,6 +19,7 @@ class RLox
         '<native fn>'
       end
     end
+    attr_reader :globals
 
     def initialize
       @globals = Environment.new
