@@ -81,7 +81,7 @@ class RLox
 
     def visit_var_stmt(stmt)
       value = nil
-      value = evaluate stmt.initializer unless stmt.initializer.nil?
+      value = evaluate stmt.initializer if stmt.initializer
 
       environment.define stmt.name.lexeme, value
       nil
@@ -99,6 +99,16 @@ class RLox
 
     def visit_block_stmt(stmt)
       execute_block stmt.statements, Environment.new(environment)
+      nil
+    end
+
+    def visit_if_stmt(stmt)
+      if truthy? evaluate stmt.condition
+        execute stmt.then_branch
+      elsif stmt.else_branch
+        execute stmt.else_branch
+      end
+
       nil
     end
 
