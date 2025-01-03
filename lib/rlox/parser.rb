@@ -25,6 +25,7 @@ class RLox
     end
 
     def declaration
+      return function 'function' if match? TokenType::FUN
       return var_declaration if match? TokenType::VAR
 
       statement
@@ -108,6 +109,23 @@ class RLox
       expr = expression
       consume TokenType::SEMICOLON, "Expect ';' after expression."
       Stmt::Expression.new expr
+    end
+
+    def function(kind)
+      name = consume TokenType::IDENTIFIER, "Expect #{kind} name."
+      consume TokenType::LEFT_PAREN, "Expect '(' after #{kind} name."
+      parameters = []
+
+      unless check TokenType::RIGHT_PAREN
+        begin
+          error peek, "Can't have more than 255 parameters." if parameters.size >= 255
+
+          parameters.add consume(TokenType::IDENTIFIER, 'Expect parameter name.')
+        end while match? TokenType::COMMA
+      end
+      consume TokenType::RIGHT_PAREN, "Expect ')' after parameters."
+      body = block
+      Stmt::Function.new name, parameters, body
     end
 
     def block
