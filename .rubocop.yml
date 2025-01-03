@@ -52,6 +52,10 @@ Style/GuardClause:
 Style/NumericLiterals:
   Enabled: false
 
+Style/RaiseArgs:
+  AllowedCompactTypes:
+  - Return
+
 Style/SafeNavigation:
   MaxChainLength: 1
 

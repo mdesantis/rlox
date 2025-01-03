@@ -107,6 +107,13 @@ class RLox
       nil
     end
 
+    def visit_return_stmt(stmt)
+      value = nil
+      value = evaluate stmt.value if stmt.value
+
+      raise Return.new(value)
+    end
+
     def visit_var_stmt(stmt)
       value = nil
       value = evaluate stmt.initializer if stmt.initializer

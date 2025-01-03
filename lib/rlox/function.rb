@@ -16,7 +16,12 @@ class RLox
         environment.define declaration.params[i].lexeme, arguments[i]
       end
 
-      interpreter.execute_block declaration.body, environment
+      begin
+        interpreter.execute_block declaration.body, environment
+      rescue Return => error
+        return error.value
+      end
+
       nil
     end
 

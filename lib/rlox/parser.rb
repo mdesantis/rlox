@@ -102,7 +102,7 @@ class RLox
       value = nil
       value = expression unless check TokenType::SEMICOLON
 
-      consume Token::SEMICOLON, "Expect ';' after return value."
+      consume TokenType::SEMICOLON, "Expect ';' after return value."
       Stmt::Return.new keyword, value
     end
 
