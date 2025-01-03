@@ -12,7 +12,7 @@ class RLox
     end
 
     def get(name)
-      return values[name.lexeme] if values.key? name
+      return values[name.lexeme] if values.key? name.lexeme
       return enclosing.get name if enclosing
 
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."

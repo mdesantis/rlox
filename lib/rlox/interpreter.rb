@@ -97,12 +97,31 @@ class RLox
       value
     end
 
+    def visit_block_stmt(stmt)
+      execute_block stmt.statements, Environment.new(environment)
+      nil
+    end
+
     private
 
-    attr_reader :environment
+    attr_accessor :environment
 
     def execute(stmt)
       stmt.accept self
+    end
+
+    def execute_block(statements, environment)
+      previous = self.environment
+
+      begin
+        self.environment = environment
+
+        statements.each do |statement|
+          execute statement
+        end
+      ensure
+        self.environment = previous
+      end
     end
 
     def check_number_operand(operator, operand)

@@ -35,6 +35,7 @@ class RLox
 
     def statement
       return print_statement if match? TokenType::PRINT
+      return Stmt::Block.new block if match? TokenType::LEFT_BRACE
 
       expression_statement
     end
@@ -49,6 +50,15 @@ class RLox
       expr = expression
       consume TokenType::SEMICOLON, "Expect ';' after expression."
       Stmt::Expression.new expr
+    end
+
+    def block
+      statements = []
+
+      statements.push declaration while !check(TokenType::RIGHT_BRACE) && !at_end?
+
+      consume TokenType::RIGHT_BRACE, "Expect '}' after block."
+      statements
     end
 
     def assignment
