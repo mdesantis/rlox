@@ -141,6 +141,10 @@ class RLox
       raise RLox::RuntimeError.new expr.paren, 'Can only call functions and classes.' unless callee.callable?
 
       function = callee
+      if arguments.size != function.arity
+        raise RLox::RuntimeError.new expr.paren, "Expected #{function.arity} arguments but got #{arguments.size}."
+      end
+
       function.call self, argument
     end
 
