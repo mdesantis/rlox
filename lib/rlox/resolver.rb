@@ -33,6 +33,12 @@ class RLox
       nil
     end
 
+    def visit_assign_expr(expr)
+      resolve expr.value
+      resolve_local expr, expr.name
+      nil
+    end
+
     def visit_variable_expr(expr)
       if !scopes.empty? && scopes.last[expr.name.lexeme] == false
         RLox.error "Can't read local vafiable in its own initializer.", token: expr.name
