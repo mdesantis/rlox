@@ -19,11 +19,13 @@ class RLox
         '<native fn>'
       end
     end
+
     attr_reader :globals
 
     def initialize
       @globals = Environment.new
       @environment = @globals
+      @locals = {}
 
       @globals.define 'clock', ClockFn.new
     end
@@ -198,10 +200,15 @@ class RLox
 
     private
 
+    attr_reader :locals
     attr_accessor :environment
 
     def execute(stmt)
       stmt.accept self
+    end
+
+    def resolve(expr, depth)
+      locals[expr] = depth
     end
 
     def check_number_operand(operator, operand)
