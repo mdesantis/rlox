@@ -143,6 +143,8 @@ class RLox
     def declare(name)
       return if scopes.empty?
 
+      RLox.error 'Already a variable with this name in this scope', token: name if scope.key? name.lexeme
+
       scope.last[name.lexeme] = false
     end
 
