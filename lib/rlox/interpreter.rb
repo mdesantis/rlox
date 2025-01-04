@@ -146,6 +146,13 @@ class RLox
       nil
     end
 
+    def visit_class_stmt(stmt)
+      environment.define stmt.name.lexeme, nil
+      klass = RLox::Class.new stmt.name.lexeme
+      environment.assign stmt.name, klass
+      nil
+    end
+
     def visit_if_stmt(stmt)
       if truthy? evaluate stmt.condition
         execute stmt.then_branch

@@ -25,6 +25,7 @@ class RLox
     end
 
     def declaration
+      return class_declaration if match? TokenType::CLASS
       return function 'function' if match? TokenType::FUN
       return var_declaration if match? TokenType::VAR
 
@@ -32,6 +33,18 @@ class RLox
     rescue ParseError
       synchronize
       nil
+    end
+
+    def class_declaration
+      name = consume TokenType::IDENTIFIER, 'Expect class name.'
+      consume TokenType::LEFT_BRACE, "Expect '{' before class body."
+
+      methods = []
+      methods.push function 'method' while !check(TokenType::RIGHT_BRACE) && !at_end?
+
+      consume TokenType::RIGHT_BRACE, "Expect '}' before class body."
+
+      Stmt::Class.new name, methods
     end
 
     def statement

@@ -32,6 +32,12 @@ class RLox
       nil
     end
 
+    def visit_class_stmt(stmt)
+      declare stmt.name
+      define stmt.name
+      nil
+    end
+
     def visit_var_stmt(stmt)
       declare stmt.name
       resolve stmt.initializer if stmt.initializer
