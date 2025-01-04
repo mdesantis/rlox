@@ -8,6 +8,18 @@ class RLox
       @name = name
     end
 
+    def callable?
+      true
+    end
+
+    def call(_interpeter, _arguments)
+      Instance.new self
+    end
+
+    def arity
+      0
+    end
+
     def to_s
       name
     end
