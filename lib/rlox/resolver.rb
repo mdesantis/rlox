@@ -8,8 +8,13 @@ class RLox
     end
 
     def resolve(statements)
-      statements.each do |statement|
-        resolve_statement statement
+      case statements
+      when Stmt then resolve_statement stmt
+      when Expr then resolve_expression expr
+      else
+        statements.each do |statement|
+          resolve_statement statement
+        end
       end
     end
 
@@ -18,6 +23,13 @@ class RLox
       resolve stmt.statements
       end_scope
 
+      nil
+    end
+
+    def visit_var_stmt(stmt)
+      declare stmt.name
+      resolve stmt.initializer if stmt.initializer
+      define stmt.name
       nil
     end
 
@@ -39,6 +51,18 @@ class RLox
 
     def end_scope
       scopes.pop
+    end
+
+    def declare(name)
+      return if scopes.empty?
+
+      scope.last[name.lexeme] = false
+    end
+
+    def define(name)
+      return if scopes.empty?
+
+      scopes.last[name.lexeme] = true
     end
   end
 end
