@@ -312,9 +312,14 @@ class RLox
       expr = primary
 
       loop do
-        break unless match? TokenType::LEFT_PAREN
-
-        expr = finish_call expr
+        if match? TokenType::LEFT_PAREN
+          expr = finish_call expr
+        elsif match? TokenType::DOT
+          name = consume TokenType::IDENTIFIER, "Expect property name after '.'."
+          expr = Expr::Get.new expr, name
+        else
+          break
+        end
       end
 
       expr

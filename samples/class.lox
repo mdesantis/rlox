@@ -5,3 +5,6 @@ class DevonshireCream {
 }
 
 print DevonshireCream;
+
+var a = DevonshireCream();
+print a;

@@ -198,6 +198,13 @@ class RLox
       function.call self, arguments
     end
 
+    def visit_get_expr(expr)
+      object = evaluate expr.object
+      return object.get expr.name if object.is_a? Instance
+
+      raise RLox::RuntimeError.new expr.name, 'Only instances have properties.'
+    end
+
     def execute_block(statements, environment)
       previous = self.environment
 
