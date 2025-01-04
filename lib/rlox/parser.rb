@@ -348,7 +348,7 @@ class RLox
       return Expr::Literal.new true if match? TokenType::TRUE
       return Expr::Literal.new nil if match? TokenType::NIL
       return Expr::Literal.new previous.literal if match? TokenType::NUMBER, TokenType::STRING
-
+      return Expr::This.new previous if match? TokenType::THIS
       return Expr::Variable.new previous if match? TokenType::IDENTIFIER
 
       if match? TokenType::LEFT_PAREN

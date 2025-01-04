@@ -13,7 +13,7 @@ class RLox
       return fields[name.lexeme] if fields.key? name.lexeme
 
       method = klass.find_method name.lexeme
-      return method if method
+      return method.bind self if method
 
       raise RLox::RuntimeError.new name, "Undefined property '#{name.lexeme}'."
     end

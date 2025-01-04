@@ -222,6 +222,10 @@ class RLox
       value
     end
 
+    def visit_this_expr(expr)
+      look_up_variable expr.keyword, expr
+    end
+
     def execute_block(statements, environment)
       previous = self.environment
 

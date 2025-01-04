@@ -37,10 +37,15 @@ class RLox
       declare stmt.name
       define stmt.name
 
+      begin_scope
+      scopes.last['this'] = true
+
       stmt.methods.each do |method|
         declaration = FunctionType::METHOD
         resolve_function method, declaration
       end
+
+      end_scope
 
       nil
     end
@@ -129,6 +134,10 @@ class RLox
       resolve expr.value
       resolve expr.object
       nil
+    end
+
+    def visit_this_expr(expr)
+      resolve_local expr, expr.keyword
     end
 
     def visit_grouping_expr(expr)

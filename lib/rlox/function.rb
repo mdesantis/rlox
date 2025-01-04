@@ -26,6 +26,12 @@ class RLox
       nil
     end
 
+    def bind(instance)
+      environment = Environment.new closure
+      environment.define 'this', instance
+      self.class.new declaration, environment
+    end
+
     def arity
       declaration.params.size
     end
