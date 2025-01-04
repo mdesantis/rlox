@@ -33,6 +33,15 @@ class RLox
       nil
     end
 
+    def visit_variable_expr(expr)
+      if !scopes.empty? && scopes.last[expr.name.lexeme] == false
+        RLox.error "Can't read local vafiable in its own initializer.", token: expr.name
+      end
+
+      resolve_local expr, expr.name
+      nil
+    end
+
     private
 
     attr_reader :interpreter, :scopes
@@ -63,6 +72,15 @@ class RLox
       return if scopes.empty?
 
       scopes.last[name.lexeme] = true
+    end
+
+    def resolve_local(expr, name)
+      (scopes.size - 1).downto(0) do |i|
+        if scopes[i].key? name.lexeme
+          interpreter.resolve expr, scopes.size - 1 - i
+          return
+        end
+      end
     end
   end
 end

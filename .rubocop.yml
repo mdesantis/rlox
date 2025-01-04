@@ -19,6 +19,9 @@ Lint/MissingSuper:
 Lint/Loop:
   Enabled: false
 
+Lint/NonLocalExitFromIterator:
+  Enabled: false
+
 Lint/UnreachableLoop:
   Enabled: false
 
