@@ -118,6 +118,12 @@ class RLox
       nil
     end
 
+    def visit_set_expr(expr)
+      resolve expr.value
+      resolve expr.object
+      nil
+    end
+
     def visit_grouping_expr(expr)
       resolve expr.expression
       nil

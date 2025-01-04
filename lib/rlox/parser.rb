@@ -172,6 +172,9 @@ class RLox
         if expr.is_a? Expr::Variable
           name = expr.name
           return Expr::Assign.new name, value
+        elsif expr.is_a? Expr::Get
+          get = expr
+          return Expr::Set.new get.object, get.name, value
         end
 
         error equals, 'Invalid assignment target.'

@@ -205,6 +205,16 @@ class RLox
       raise RLox::RuntimeError.new expr.name, 'Only instances have properties.'
     end
 
+    def visit_set_expr(expr)
+      object = evaluate expr.object
+
+      raise RLox::RuntimeError.new expr.name, 'Only instances have fields.' unless object.is_a? Instance
+
+      value = evaluate expr.value
+      object.set expr.name, value
+      value
+    end
+
     def execute_block(statements, environment)
       previous = self.environment
 
