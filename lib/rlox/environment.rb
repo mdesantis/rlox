@@ -45,6 +45,10 @@ class RLox
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
     end
 
+    def assign_at(distance, name, value)
+      ancestor(distance).values[name.lexeme] = value
+    end
+
     private
 
     attr_reader :values, :enclosing

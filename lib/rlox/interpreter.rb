@@ -130,7 +130,14 @@ class RLox
 
     def visit_assign_expr(expr)
       value = evaluate expr.value
-      environment.assign expr.name, value
+
+      distance = locals[expr]
+      if distance
+        environment.assign_at distance, expr.name, value
+      else
+        globals.assign expr.name, value
+      end
+
       value
     end
 
