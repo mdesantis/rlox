@@ -148,7 +148,14 @@ class RLox
 
     def visit_class_stmt(stmt)
       environment.define stmt.name.lexeme, nil
-      klass = RLox::Class.new stmt.name.lexeme
+
+      methods = {}
+      stmt.methods.each do |method|
+        function = Function.new method, environment
+        methods[method.name.lexeme] = function
+      end
+
+      klass = RLox::Class.new stmt.name.lexeme, methods
       environment.assign stmt.name, klass
       nil
     end

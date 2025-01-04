@@ -5,6 +5,7 @@ class RLox
     module FunctionType
       NONE = :"#{self}::NONE"
       FUNCTION = :"#{self}::FUNCTION"
+      METHOD = :"#{self}::METHOD"
     end
 
     def initialize(interpreter)
@@ -35,6 +36,12 @@ class RLox
     def visit_class_stmt(stmt)
       declare stmt.name
       define stmt.name
+
+      stmt.methods.each do |method|
+        declaration = FunctionType::METHOD
+        resolve_function method, declaration
+      end
+
       nil
     end
 
