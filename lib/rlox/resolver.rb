@@ -56,6 +56,70 @@ class RLox
       nil
     end
 
+    def visit_expression_stmt(stmt)
+      resolve stmt.expression
+      nil
+    end
+
+    def visit_if_stmt(stmt)
+      resolve stmt.condition
+      resolve stmt.then_branch
+      resolve stmt.else_branch if stmt.else_branch
+      nil
+    end
+
+    def visit_print_stmt(stmt)
+      resolve stmt.expression
+      nil
+    end
+
+    def visit_return_stmt(stmt)
+      resolve stmt.value if stmt.value
+      nil
+    end
+
+    def visit_while_stmt(stmt)
+      resolve stmt.condition
+      resolve stmt.body
+      nil
+    end
+
+    def visit_binary_expr(expr)
+      resolve expr.left
+      resolve expr.right
+      nil
+    end
+
+    def visit_call_expr(expr)
+      resolve expr.callee
+
+      expr.arguments.each do |argument|
+        resolve argument
+      end
+
+      nil
+    end
+
+    def visit_grouping_expr(expr)
+      resolve expr.expression
+      nil
+    end
+
+    def visit_literal_expr(_expr)
+      nil
+    end
+
+    def visit_logical_expr(expr)
+      resolve expr.left
+      resolve expr.right
+      nil
+    end
+
+    def visit_unary_expr(expr)
+      resolve expr.right
+      nil
+    end
+
     private
 
     attr_reader :interpreter, :scopes
