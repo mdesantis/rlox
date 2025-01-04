@@ -8,10 +8,16 @@ class RLox
       METHOD = :"#{self}::METHOD"
     end
 
+    module ClassType
+      NONE = :"#{self}::NONE"
+      CLASS = :"#{self}::CLASS"
+    end
+
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
       @current_function = FunctionType::NONE
+      @current_class = ClassType::CLASS
     end
 
     def resolve(statements)
@@ -34,6 +40,9 @@ class RLox
     end
 
     def visit_class_stmt(stmt)
+      enclosing_class = current_class
+      self.current_class = ClassType::CLASS
+
       declare stmt.name
       define stmt.name
 
@@ -47,6 +56,7 @@ class RLox
 
       end_scope
 
+      self.current_class = enclosing_class
       nil
     end
 
@@ -137,6 +147,8 @@ class RLox
     end
 
     def visit_this_expr(expr)
+      RLox.error expr.keyword, "Can't use 'this' outside of a class." if current_class == ClassType::NONE
+
       resolve_local expr, expr.keyword
     end
 
@@ -163,7 +175,7 @@ class RLox
     private
 
     attr_reader :interpreter, :scopes
-    attr_accessor :current_function
+    attr_accessor :current_function, :current_class
 
     def resolve_statement(stmt)
       stmt.accept self
