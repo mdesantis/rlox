@@ -48,6 +48,14 @@ class RLox
       nil
     end
 
+    def visit_function_stmt(stmt)
+      declare stmt.name
+      define stmt.name
+
+      resolve_function stmt
+      nil
+    end
+
     private
 
     attr_reader :interpreter, :scopes
@@ -87,6 +95,16 @@ class RLox
           return
         end
       end
+    end
+
+    def resolve_function(function)
+      begin_scope
+      function.params.each do |param|
+        declare param
+        define param
+      end
+      resolve function.body
+      end_scope
     end
   end
 end
