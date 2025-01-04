@@ -125,7 +125,7 @@ class RLox
     end
 
     def visit_variable_expr(expr)
-      environment.get expr.name
+      look_up_variable expr.name, expr
     end
 
     def visit_assign_expr(expr)
@@ -221,6 +221,16 @@ class RLox
       return if left.is_a?(Float) && right.is_a?(Float)
 
       raise RLox::RuntimeError.new operator, 'Operand must be numbers.'
+    end
+
+    def look_up_variable(name, expr)
+      distance = locals[expr]
+
+      if distance
+        environment.get_at distance, name.lexeme
+      else
+        globals.get name
+      end
     end
 
     def evaluate(expr)

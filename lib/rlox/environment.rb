@@ -18,6 +18,19 @@ class RLox
       raise RLox::RuntimeError.new name, "Undefined variable '#{name.lexeme}'."
     end
 
+    def get_at(distance, name)
+      ancestor(distance).values[name]
+    end
+
+    def ancestor(distance)
+      environment = self
+      distance.times do
+        environment = environment.enclosing
+      end
+
+      environemnt
+    end
+
     def assign(name, value)
       if values.key? name.lexeme
         values[name.lexeme] = value
