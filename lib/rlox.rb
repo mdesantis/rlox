@@ -87,6 +87,8 @@ class RLox
       resolver = Resolver.new interpreter
       resolver.resolve statements
 
+      return if had_error
+
       interpreter.interpret statements
     end
 

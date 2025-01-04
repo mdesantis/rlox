@@ -2,6 +2,8 @@
 
 class RLox
   class Environment
+    attr_reader :values, :enclosing
+
     def initialize(enclosing = nil)
       @values = {}
       @enclosing = enclosing
@@ -28,7 +30,7 @@ class RLox
         environment = environment.enclosing
       end
 
-      environemnt
+      environment
     end
 
     def assign(name, value)
@@ -48,9 +50,5 @@ class RLox
     def assign_at(distance, name, value)
       ancestor(distance).values[name.lexeme] = value
     end
-
-    private
-
-    attr_reader :values, :enclosing
   end
 end

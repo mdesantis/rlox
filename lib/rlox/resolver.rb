@@ -2,15 +2,21 @@
 
 class RLox
   class Resolver
+    module FunctionType
+      NONE = :"#{self}::NONE"
+      FUNCTION = :"#{self}::FUNCTION"
+    end
+
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
+      @current_function = FunctionType::NONE
     end
 
     def resolve(statements)
       case statements
-      when Stmt then resolve_statement stmt
-      when Expr then resolve_expression expr
+      when Stmt then resolve_statement statements
+      when Expr then resolve_expression statements
       else
         statements.each do |statement|
           resolve_statement statement
@@ -52,7 +58,7 @@ class RLox
       declare stmt.name
       define stmt.name
 
-      resolve_function stmt
+      resolve_function stmt, FunctionType::FUNCTION
       nil
     end
 
@@ -74,6 +80,7 @@ class RLox
     end
 
     def visit_return_stmt(stmt)
+      RLox.error "Can't return from top-level code", token: stmt.keyword if current_function == FunctionType::NONE
       resolve stmt.value if stmt.value
       nil
     end
@@ -123,6 +130,7 @@ class RLox
     private
 
     attr_reader :interpreter, :scopes
+    attr_accessor :current_function
 
     def resolve_statement(stmt)
       stmt.accept self
@@ -143,9 +151,10 @@ class RLox
     def declare(name)
       return if scopes.empty?
 
-      RLox.error 'Already a variable with this name in this scope', token: name if scope.key? name.lexeme
+      scope = scopes.last
+      RLox.error 'Already a variable with this name in this scope.', token: name if scope.key? name.lexeme
 
-      scope.last[name.lexeme] = false
+      scope[name.lexeme] = false
     end
 
     def define(name)
@@ -163,7 +172,10 @@ class RLox
       end
     end
 
-    def resolve_function(function)
+    def resolve_function(function, type)
+      enclosing_function = current_function
+      self.current_function = type
+
       begin_scope
       function.params.each do |param|
         declare param
@@ -171,6 +183,7 @@ class RLox
       end
       resolve function.body
       end_scope
+      self.current_function = enclosing_function
     end
   end
 end

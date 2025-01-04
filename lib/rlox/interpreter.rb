@@ -205,6 +205,10 @@ class RLox
       end
     end
 
+    def resolve(expr, depth)
+      locals[expr] = depth
+    end
+
     private
 
     attr_reader :locals
@@ -212,10 +216,6 @@ class RLox
 
     def execute(stmt)
       stmt.accept self
-    end
-
-    def resolve(expr, depth)
-      locals[expr] = depth
     end
 
     def check_number_operand(operator, operand)
