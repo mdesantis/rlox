@@ -12,6 +12,7 @@ class RLox
     module ClassType
       NONE = :"#{self}::NONE"
       CLASS = :"#{self}::CLASS"
+      SUBCLASS = :"#{self}::SUBCLASS"
     end
 
     def initialize(interpreter)
@@ -51,9 +52,9 @@ class RLox
         RLox.error "A class can't inherit from itself.", stmt.superclass.name
       end
 
-      resolve stmt.superclass if stmt.superclass
-
       if stmt.superclass
+        self.current_class = ClassType::SUBCLASS
+        resolve stmt.superclass
         begin_scope
         scopes.last['super'] = true
       end
@@ -168,6 +169,12 @@ class RLox
     end
 
     def visit_super_expr(expr)
+      if current_class == ClassType::NONE
+        RLox.error "Can't user 'super' outside of a class.", token: expr.keyword
+      elsif current_class != ClassType::SUBCLASS
+        RLox.error "Can't use 'super' in a class with no superclass.", token: expr.keyword
+      end
+
       resolve_local expr, expr.keyword
       nil
     end
