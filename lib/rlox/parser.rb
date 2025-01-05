@@ -37,6 +37,13 @@ class RLox
 
     def class_declaration
       name = consume TokenType::IDENTIFIER, 'Expect class name.'
+
+      superclass = nil
+      if match? TokenType::LESS
+        consume TokenType::IDENTIFIER, 'Expect superclass name.'
+        superclass = Expr::Variable.new previous
+      end
+
       consume TokenType::LEFT_BRACE, "Expect '{' before class body."
 
       methods = []
@@ -44,7 +51,7 @@ class RLox
 
       consume TokenType::RIGHT_BRACE, "Expect '}' before class body."
 
-      Stmt::Class.new name, methods
+      Stmt::Class.new name, superclass, methods
     end
 
     def statement

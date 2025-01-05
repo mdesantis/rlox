@@ -4,8 +4,9 @@ class RLox
   class Class
     attr_reader :name
 
-    def initialize(name, methods)
+    def initialize(name, superclass, methods)
       @name = name
+      @superclass = superclass
       @methods = methods
     end
 

@@ -47,6 +47,12 @@ class RLox
       declare stmt.name
       define stmt.name
 
+      if stmt.superclass && stmt.name.lexeme == stmt.superclass.name.lexeme
+        RLox.error "A class can't inherit from itself.", stmt.superclass.name
+      end
+
+      resolve stmt.superclass if stmt.superclass
+
       begin_scope
       scopes.last['this'] = true
 

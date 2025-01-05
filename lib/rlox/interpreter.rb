@@ -147,6 +147,14 @@ class RLox
     end
 
     def visit_class_stmt(stmt)
+      superclass = nil
+      if stmt.superclass
+        superclass = evaluate stmt.superclass
+        unless superclass.is_a? RLox::Class
+          raise RLox::RuntimeError.new stmt.superclass.name, 'Superclass must be a class.'
+        end
+      end
+
       environment.define stmt.name.lexeme, nil
 
       methods = {}
@@ -155,7 +163,7 @@ class RLox
         methods[method.name.lexeme] = function
       end
 
-      klass = RLox::Class.new stmt.name.lexeme, methods
+      klass = RLox::Class.new stmt.name.lexeme, superclass, methods
       environment.assign stmt.name, klass
       nil
     end
