@@ -157,6 +157,11 @@ class RLox
 
       environment.define stmt.name.lexeme, nil
 
+      if stmt.superclass
+        self.environment = Environment.new environment
+        environment.define 'super', superclass
+      end
+
       methods = {}
       stmt.methods.each do |method|
         function = Function.new method, environment, method.name.lexeme == 'init'
@@ -164,6 +169,9 @@ class RLox
       end
 
       klass = RLox::Class.new stmt.name.lexeme, superclass, methods
+
+      self.environment = environment.enclosing if superclass
+
       environment.assign stmt.name, klass
       nil
     end
@@ -228,6 +236,18 @@ class RLox
       value = evaluate expr.value
       object.set expr.name, value
       value
+    end
+
+    def visit_super_expr(expr)
+      distance = locals[expr]
+      superclass = environment.get_at distance, 'super'
+
+      object = environment.get_at distance - 1, 'this'
+
+      method = superclass.find_method expr.method.lexeme
+      raise RLox::RuntimeError.new expr.method, "Undefined property '#{expr.method.lexeme}'." unless method
+
+      method.bind object
     end
 
     def visit_this_expr(expr)

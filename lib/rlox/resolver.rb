@@ -53,6 +53,11 @@ class RLox
 
       resolve stmt.superclass if stmt.superclass
 
+      if stmt.superclass
+        begin_scope
+        scopes.last['super'] = true
+      end
+
       begin_scope
       scopes.last['this'] = true
 
@@ -63,6 +68,8 @@ class RLox
       end
 
       end_scope
+
+      end_scope if stmt.superclass
 
       self.current_class = enclosing_class
       nil
@@ -157,6 +164,11 @@ class RLox
     def visit_set_expr(expr)
       resolve expr.value
       resolve expr.object
+      nil
+    end
+
+    def visit_super_expr(expr)
+      resolve_local expr, expr.keyword
       nil
     end
 
