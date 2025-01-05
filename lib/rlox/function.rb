@@ -21,6 +21,8 @@ class RLox
       begin
         interpreter.execute_block declaration.body, environment
       rescue Return => error
+        return closure.get_at 0, 'this' if initializer?
+
         return error.value
       end
 

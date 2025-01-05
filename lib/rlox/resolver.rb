@@ -52,6 +52,7 @@ class RLox
 
       stmt.methods.each do |method|
         declaration = FunctionType::METHOD
+        declaration = FunctionType::INITIALIZER if method.name.lexeme == 'init'
         resolve_function method, declaration
       end
 
@@ -110,7 +111,13 @@ class RLox
 
     def visit_return_stmt(stmt)
       RLox.error "Can't return from top-level code", token: stmt.keyword if current_function == FunctionType::NONE
-      resolve stmt.value if stmt.value
+      if stmt.value
+        if current_function == FunctionType::INITIALIZER
+          RLox.error "Can't return a value from an initializer.", token: stmt.keyword
+        end
+        resolve stmt.value
+      end
+
       nil
     end
 
