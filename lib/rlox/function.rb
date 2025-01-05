@@ -2,9 +2,10 @@
 
 class RLox
   class Function
-    def initialize(declaration, closure)
+    def initialize(declaration, closure, is_initializer)
       @declaration = declaration
       @closure = closure
+      @is_initializer = is_initializer
     end
 
     def callable?
@@ -23,13 +24,15 @@ class RLox
         return error.value
       end
 
+      return closure.get_at 0, 'this' if initializer?
+
       nil
     end
 
     def bind(instance)
       environment = Environment.new closure
       environment.define 'this', instance
-      self.class.new declaration, environment
+      self.class.new declaration, environment, initializer?
     end
 
     def arity
@@ -38,6 +41,10 @@ class RLox
 
     def to_s
       "<fn #{declaration.name.lexeme}>"
+    end
+
+    def initializer?
+      @is_initializer
     end
 
     private

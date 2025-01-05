@@ -5,6 +5,7 @@ class RLox
     module FunctionType
       NONE = :"#{self}::NONE"
       FUNCTION = :"#{self}::FUNCTION"
+      INITIALIZER = :"#{self}::INITIALIZER"
       METHOD = :"#{self}::METHOD"
     end
 

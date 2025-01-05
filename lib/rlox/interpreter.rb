@@ -98,7 +98,7 @@ class RLox
     end
 
     def visit_function_stmt(stmt)
-      function = RLox::Function.new stmt, environment
+      function = RLox::Function.new stmt, environment, false
       environment.define stmt.name.lexeme, function
       nil
     end
@@ -151,7 +151,7 @@ class RLox
 
       methods = {}
       stmt.methods.each do |method|
-        function = Function.new method, environment
+        function = Function.new method, environment, method.name.lexeme == 'init'
         methods[method.name.lexeme] = function
       end
 
