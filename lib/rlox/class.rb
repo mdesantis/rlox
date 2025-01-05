@@ -11,7 +11,9 @@ class RLox
     end
 
     def find_method(name)
-      methods[name] if methods.key? name
+      return methods[name] if methods.key? name
+
+      superclass.find_method name if superclass
     end
 
     def callable?
@@ -38,6 +40,6 @@ class RLox
 
     private
 
-    attr_reader :methods
+    attr_reader :methods, :superclass
   end
 end
