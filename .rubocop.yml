@@ -43,6 +43,9 @@ Metrics/PerceivedComplexity:
 Naming/RescuedExceptionsVariableName:
   PreferredName: error
 
+Performance/BindCall:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
@@ -60,7 +63,7 @@ Style/RaiseArgs:
   - Return
 
 Style/SafeNavigation:
-  MaxChainLength: 1
+  Enabled: false
 
 Style/SuperWithArgsParentheses:
   Enabled: false

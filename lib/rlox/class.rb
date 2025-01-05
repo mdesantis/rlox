@@ -17,12 +17,18 @@ class RLox
       true
     end
 
-    def call(_interpeter, _arguments)
-      Instance.new self
+    def call(interpreter, arguments)
+      instance = Instance.new self
+      initializer = find_method 'init'
+      initializer.bind(instance).call interpreter, arguments if initializer
+      instance
     end
 
     def arity
-      0
+      initializer = find_method 'init'
+      return 0 unless initializer
+
+      initializer.arity
     end
 
     def to_s
