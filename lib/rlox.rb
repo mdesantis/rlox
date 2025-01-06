@@ -44,7 +44,7 @@ class RLox
     end
 
     def runtime_error(error)
-      puts "#{error.message}\n[line #{error.token.line}]"
+      warn "#{error.message}\n[line #{error.token.line}]"
       self.had_runtime_error = true
     end
 
