@@ -2,8 +2,5 @@
 
 class RLox
   class Expr
-    def callable?
-      false
-    end
   end
 end

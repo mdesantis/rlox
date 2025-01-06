@@ -211,7 +211,9 @@ class RLox
         evaluate argument
       end
 
-      raise RLox::RuntimeError.new expr.paren, 'Can only call functions and classes.' unless callee.callable?
+      unless callee.respond_to?(:callable?) && callee.callable?
+        raise RLox::RuntimeError.new expr.paren, 'Can only call functions and classes.'
+      end
 
       function = callee
       if arguments.size != function.arity
