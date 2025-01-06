@@ -6,6 +6,8 @@ require:
 AllCops:
   TargetRubyVersion: 3.4
   NewCops: enable
+  Exclude:
+    - 'craftinginterpreters/**/*'
 
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented

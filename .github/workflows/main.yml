@@ -19,6 +19,8 @@ jobs:
         with:
           bundler-cache: true
       - name: Run tests
-        run: bundle exec rake test
+        run: bundle exec rake test X='TestRLox#test_that_it_passes_the_official_test_suite'
+      - name: Run official test suite
+        run: bundle exec rake test N='TestRLox#test_that_it_passes_the_official_test_suite'
       - name: Check linting and formatting
         run: bundle exec rake rubocop
