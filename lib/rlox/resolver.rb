@@ -19,7 +19,7 @@ class RLox
       @interpreter = interpreter
       @scopes = []
       @current_function = FunctionType::NONE
-      @current_class = ClassType::CLASS
+      @current_class = ClassType::NONE
     end
 
     def resolve(statements)
@@ -183,7 +183,7 @@ class RLox
     end
 
     def visit_this_expr(expr)
-      RLox.error expr.keyword, "Can't use 'this' outside of a class." if current_class == ClassType::NONE
+      RLox.error "Can't use 'this' outside of a class.", token: expr.keyword if current_class == ClassType::NONE
 
       resolve_local expr, expr.keyword
     end
