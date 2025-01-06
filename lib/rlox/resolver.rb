@@ -173,7 +173,7 @@ class RLox
 
     def visit_super_expr(expr)
       if current_class == ClassType::NONE
-        RLox.error "Can't user 'super' outside of a class.", token: expr.keyword
+        RLox.error "Can't use 'super' outside of a class.", token: expr.keyword
       elsif current_class != ClassType::SUBCLASS
         RLox.error "Can't use 'super' in a class with no superclass.", token: expr.keyword
       end
