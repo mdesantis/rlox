@@ -292,7 +292,7 @@ class RLox
     def check_number_operands(operator, left, right)
       return if left.is_a?(Float) && right.is_a?(Float)
 
-      raise RLox::RuntimeError.new operator, 'Operand must be numbers.'
+      raise RLox::RuntimeError.new operator, 'Operands must be numbers.'
     end
 
     def look_up_variable(name, expr)

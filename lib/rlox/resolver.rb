@@ -55,6 +55,9 @@ class RLox
       if stmt.superclass
         self.current_class = ClassType::SUBCLASS
         resolve stmt.superclass
+      end
+
+      if stmt.superclass
         begin_scope
         scopes.last['super'] = true
       end
@@ -91,7 +94,7 @@ class RLox
 
     def visit_variable_expr(expr)
       if !scopes.empty? && scopes.last[expr.name.lexeme] == false
-        RLox.error "Can't read local vafiable in its own initializer.", token: expr.name
+        RLox.error "Can't read local variable in its own initializer.", token: expr.name
       end
 
       resolve_local expr, expr.name
@@ -124,7 +127,7 @@ class RLox
     end
 
     def visit_return_stmt(stmt)
-      RLox.error "Can't return from top-level code", token: stmt.keyword if current_function == FunctionType::NONE
+      RLox.error "Can't return from top-level code.", token: stmt.keyword if current_function == FunctionType::NONE
       if stmt.value
         if current_function == FunctionType::INITIALIZER
           RLox.error "Can't return a value from an initializer.", token: stmt.keyword
