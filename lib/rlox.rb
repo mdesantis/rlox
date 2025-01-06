@@ -77,8 +77,6 @@ class RLox
       scanner = Scanner.new source
       tokens = scanner.scan_tokens
 
-      return if had_error
-
       parser = Parser.new tokens
       statements = parser.parse
 
