@@ -11,6 +11,9 @@ This is a Ruby implementation of the
 following the [Crafting Interpreters book](https://craftinginterpreters.com)
 (interpreter section).
 
+Thoroughly tested by passing the official
+[official `jlox` test suite](https://github.com/munificent/craftinginterpreters?tab=readme-ov-file#testing).
+
 ## License
 
 [MIT License](https://opensource.org/licenses/MIT).
