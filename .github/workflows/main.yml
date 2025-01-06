@@ -17,6 +17,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+      - name: Set up Dart
+        run: |
+          wget -qO- https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/dart.gpg
+          echo 'deb [signed-by=/usr/share/keyrings/dart.gpg arch=amd64] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' | sudo tee /etc/apt/sources.list.d/dart_stable.list
+          sudo apt update -y
+          sudo apt install dart=2.19.6-1
       - name: Run tests
         run: bundle exec rake test X='TestRLox#test_that_it_passes_the_official_test_suite'
       - name: Run official test suite
