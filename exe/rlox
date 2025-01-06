@@ -1,4 +1,10 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'rlox'
+begin
+  require 'rlox'
+rescue LoadError
+  require_relative '../lib/rlox'
+end
+
+RLox.main
