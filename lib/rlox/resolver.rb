@@ -49,7 +49,7 @@ class RLox
       define stmt.name
 
       if stmt.superclass && stmt.name.lexeme == stmt.superclass.name.lexeme
-        RLox.error "A class can't inherit from itself.", stmt.superclass.name
+        RLox.error "A class can't inherit from itself.", token: stmt.superclass.name
       end
 
       if stmt.superclass
